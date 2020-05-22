@@ -1,31 +1,38 @@
 import tweepy
-import os
-#Hello!
-consumer_key=os.environ['TWITTER_CONSUMER_KEY']
-consumer_secret=os.environ['TWITTER_CONSUMER_SECRET']
-access_token=os.environ['TWITTER_ACCESS_TOKEN']
-access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET']
+import logging
+from config import create_api
+import time
 
-auth=tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token,access_token_secret)
-api=tweepy.API(auth)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
-try:
-    api.verify_credentials()
-    print("Authentication OK")
-    tweet="Hello It's me"
-    api.update_status("이거 좀 올려줘...")
-except:
-    print("Error during authentication")
-"""
-user=api.get_user("naver_news_bot")
+def check_mentions(api, keywords, since_id):
+    logger.info("Retrieving mentions")
+    new_since_id = since_id
+    for tweet in tweepy.Cursor(api.mentions_timeline,
+        since_id=since_id).items():
+        new_since_id = max(tweet.id, new_since_id)
+        if tweet.in_reply_to_status_id is not None:
+            continue
+        if any(keyword in tweet.text.lower() for keyword in keywords):
+            logger.info(f"Answering to {tweet.user.name}")
 
-print("User details: ")
-print(user.name)
-print(user.description)
-print(user.location)
-print("Last 20 Followers:")
-for follower in user.followers():
-    print(follower.name)
+            if not tweet.user.following:
+                tweet.user.follow()
 
-"""
+            api.update_status(
+                status="Please reach us via DM",
+                in_reply_to_status_id=tweet.id,
+            )
+    return new_since_id
+
+def main():
+    api = create_api()
+    since_id = 1
+    while True:
+        since_id = check_mentions(api, ["help", "support"], since_id)
+        logger.info("Waiting...")
+        time.sleep(60)
+
+if __name__ == "__main__":
+    main()
