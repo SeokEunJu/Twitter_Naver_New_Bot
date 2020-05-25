@@ -73,8 +73,8 @@ def make_short_url(result_url):
         else:
             print("Error Code:" + rescode)
 
-def main():
-    url=makeurl("search","news","코로나", 3)
+def search(keyword):
+    url=makeurl("search","news",keyword, 3)
     if(url==0):
         print("wrong input format")
         return
@@ -85,12 +85,10 @@ def main():
         return
     make_short_url(result_url)
     print(result_title)
-    print(result_short_url)
+    return result_short_url
     #지금의 코드는 그냥 한번 키워드 검색하고 끝나지만 나중엔 계속계속 호출을 할 거니까
     #전역변수로 설정된 list들을 초기화 시켜주었어요
     result_title.clear()
     result_url.clear()
     result_short_url.clear()
     
-if __name__ == "__main__":
-    main()
