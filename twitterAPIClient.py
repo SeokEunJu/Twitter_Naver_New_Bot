@@ -1,13 +1,15 @@
-import tweepy
-import logging
-from twitter_set_api import create_api
-import time
 import naverAPIClient
+import os
+import time
+import tweepy
+from twitter_set_api import create_api
+import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 def check_mentions(api, keywords, since_id):
+    naverAPI = naverAPIClient.naverAPIClient()
     logger.info("Retrieving mentions")
     new_since_id = since_id
     for tweet in tweepy.Cursor(api.mentions_timeline,
@@ -27,21 +29,36 @@ def check_mentions(api, keywords, since_id):
                     search_keyword = mention_tweet[i+1]
                     break
             logger.info(search_keyword)
-            returned_result = naverAPIClient.search(search_keyword)
+            returned_result = naverAPI.search(search_keyword)
             user_id = tweet.user.screen_name
             #Set the mention string
             status = f"@{user_id} {returned_result}"
             #tweet!
-            api.update_status(status,
+            try:
+                api.update_status(status,
+                in_reply_to_status_id = reply_id)
+            except tweepy.error.TweepError:
+                print("duplicated")
+                api.update_status("중복된 트윗입니다. 다른 키워드를 넣어주세요.",
                 in_reply_to_status_id = reply_id)
             continue
+
     return new_since_id
 
 def main():
     api = create_api()
-    since_id = 1
+    SINCE_ID = open("SINCE_ID", "r")
+    since_id = int(SINCE_ID.read())
+    SINCE_ID.close()
     while True:
         since_id = check_mentions(api, ["뉴스"], since_id)
+        #clear since_id file
+        clear_file = open("SINCE_ID", "w")
+        clear_file.close()
+        #update since_id file
+        write_file = open("SINCE_ID", "w")
+        write_file.write(str(since_id))
+        write_file.close()
         logger.info("Waiting...")
         time.sleep(3)
 
