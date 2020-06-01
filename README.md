@@ -73,7 +73,56 @@ consumer_key, consumer_secret 등의 키 값을 환경변수로 읽어들여 API
 
 따라서 해당 프로젝트를 클론하여 봇을 돌려보고 싶을 경우 SINCE_ID의 값을 1로 초기화하는 것이 좋을 것이다.
 
-## 3. 프로젝트 구현
+## 3. 설치 및 사용 방법
+
+#### (1) 환경변수 세팅
+
+(먼저 작업환경은 virtual machine에서 돌리는 우분투임을 밝힌다.)
+
+리눅스 터미널에 들어가서 환경변수를 세팅해주어야 한다.
+
+트위터와 네이버의 secret_key들을 각각 앱에서 받아와서 적합한 이름으로 등록해주면 된다.
+
+([secret_key가 뭐에요?](http://hleecaster.com/twitter-api-developer/))
+
+세팅 방법은 다음과 같다.
+
+    $vi ~/.bashrc  // /.bashrc열기
+    export NAVER_CLIENT_ID='239bna93nhgpaz9qj...'/ // .bashrc의 마지막 줄에 추가
+    $ source ~/.bashrc // 수정한 .bashrc 파일 적용
+
+이 때 네이버 API에서는 client, secret 두개의 키가 필요하며
+
+트위터 API에서는 API key, API secret key, Access token, Acess token secret 총 네 개의 키가 필요하다.
+
+<p align="center">
+<img width="600" src="https://user-images.githubusercontent.com/50102137/83411277-e38a8100-a452-11ea-91a9-c2f024bf799f.png">
+<img width="600" src="https://user-images.githubusercontent.com/50102137/83411357-0b79e480-a453-11ea-8cdf-6512d6cd7634.png">
+</p>
+
+각각 naverAPIClient, twitter_set_api에서 환경변수를 불러오는 부분이며, 환경변수의 이름과 코드의 인자가 매치되어야 API 사용이 가능하다.
+
+#### (2) 필요한 패키지 설치
+
+간혹 특정 패키지가 없어서 코드 컴파일이 안 될 수도 있다. 그럴 때를 대비해서 requirement.txt 파일이 존재한다.
+
+    $ pip install -r requirements.txt
+    
+위의 명령어를 통해 나의 작업환경과 똑같이 패키지 설치를 할 수 있다.
+
+#### (3) 무엇을 컴파일 해야 하나요?
+
+    python twitterAPIClient.py
+
+자 당신도 이제 네이버 뉴스 봇을 가지게 되었다. 제법 쓸만할 것이다!
+
+해당 코드는 SINCE_ID에 있는 값을 읽어와서 해당 ID를 가진 트윗 다음부터 3초마다 한번씩 탐색해나가며 "[뉴스 키워드]" 형태의 나에게 온 멘션이 있는지 찾는다.
+
+그리고 한 번 찾으면 해당 트윗의 ID를 다시 SINCE_ID에 기록하고 뉴스 검색결과를 돌려준다.
+
+따라서 git clone 후에 SINCE_ID 파일을 열어 1로 바꿔두는 것을 추천한다.
+
+## 4. 프로젝트 구현
 
 #### 프로젝트 결과물
 
