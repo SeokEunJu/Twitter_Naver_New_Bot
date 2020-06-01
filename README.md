@@ -1,2 +1,2 @@
-# Mentoring
-Python Mentoring
+# 파이썬을 이용한 트위터의 네이버 뉴스 봇 만들기
+
