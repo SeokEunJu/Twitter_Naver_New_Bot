@@ -6,10 +6,12 @@
 
 ### 트위터의 랜덤 선택봇 중 하나
 
+<p align="center">
 <div>
-<img width="200" src="https://user-images.githubusercontent.com/50102137/83377369-5d4d4b00-a410-11ea-9c46-3554baf23925.png">
-<img width="200" src="https://user-images.githubusercontent.com/50102137/83377369-5d4d4b00-a410-11ea-9c46-3554baf23925.png">
+<img width="300" src="https://user-images.githubusercontent.com/50102137/83377369-5d4d4b00-a410-11ea-9c46-3554baf23925.png">
+<img width="300" src="https://user-images.githubusercontent.com/50102137/83377369-5d4d4b00-a410-11ea-9c46-3554baf23925.png">
 </div>
+</p>
 
 스크린샷과 같이 트위터 API를 사용해서 유저가 공백으로 구분된 인풋 2개 이상을 넣으면 해당 인풋 중 하나를 랜덤으로 골라 유저에게 멘션으로 돌려주는 봇을 우연히 보게 되었다.
 
