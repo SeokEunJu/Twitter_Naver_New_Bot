@@ -1,12 +1,12 @@
 import itertools
 import json
-from myerror import *
+from errors import *
 import os
 import requests
 import sys
 import urllib.request
 
-class naverAPIClient:
+class NaverAPIClient:
     def __init__(self):
         self.client_id = os.environ['NAVER_CLIENT_ID']
         self.client_secret = os.environ['NAVER_CLIENT_SECRET']
@@ -80,7 +80,7 @@ class naverAPIClient:
         try:
             url = self.makeurl("search","news",keyword, 3)
         except SyntaxError:
-            return "503 Service Unavailable"
+            return "인풋 타입의 포맷을 지켜주세요."
 
         request = self.get_request(url)
 

@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 def check_mentions(api, keywords, since_id):
-    naverAPI = naverAPIClient.naverAPIClient()
+    naverAPI = naverAPIClient.NaverAPIClient()
     logger.info("Retrieving mentions")
     new_since_id = since_id
     for tweet in tweepy.Cursor(api.mentions_timeline,
