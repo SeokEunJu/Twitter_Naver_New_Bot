@@ -7,8 +7,8 @@
 ### 트위터의 랜덤 선택봇 중 하나
 
 <p align="center">
-<img width="500" src="https://user-images.githubusercontent.com/50102137/83377369-5d4d4b00-a410-11ea-9c46-3554baf23925.png">
-<img width="500" src="https://user-images.githubusercontent.com/50102137/83377382-62aa9580-a410-11ea-8777-cb255806bc3b.png">
+<img width="600" src="https://user-images.githubusercontent.com/50102137/83377369-5d4d4b00-a410-11ea-9c46-3554baf23925.png">
+<img width="600" src="https://user-images.githubusercontent.com/50102137/83377382-62aa9580-a410-11ea-8777-cb255806bc3b.png">
 </p>
 
 스크린샷과 같이 트위터 API를 사용해서 유저가 공백으로 구분된 인풋 2개 이상을 넣으면 해당 인풋 중 하나를 랜덤으로 골라 유저에게 멘션으로 돌려주는 봇을 우연히 보게 되었다.
@@ -21,8 +21,53 @@
 
 그래서 최종적으로 구체화된 아이디어가 바로, "유저가 멘션한 키워드를 네이버에 검색해 상단 뉴스 3개를 멘션해줘!" 라는 취지의 [@naver_news_bot](https://twitter.com/naver_news_bot) 이다.
 
+### (2) 프로토 타입
+
+#### 당시 원하던 모습
+
+<p align="center">
+<img width="600" src="https://user-images.githubusercontent.com/50102137/83378109-ae5e3e80-a412-11ea-94eb-d8c7e857a7b5.png">
+</p>
+
+코드 없이 손으로 링크를 복사해서 처음 올려본 트윗이다.
+
+일종의 프로토 타입
+
+시작 당시엔 뉴스 제목까지도 넣지 않고 링크만 복사해서 넣을 예정이었다.
+
+이렇게 프로토타입을 짜놓은 후 본격적인 개발에 들어갔다.
+
 ## 2. 프로젝트 구조
 
+### (1) 각 파일에 대한 설명
+
+해당 프로젝트의 구현을 위해서는 네이버와 트위터 API를 둘 다 사용해야 했기 때문에 각각의 API를 사용하는 코드를 파일 두개로 나누어서 관리했다.
+
+#### naverAPIClient.py
+
+키워드를 입력하면 해당 키워드를 뉴스 카테고리의 검색인자로 넣는 리퀘스트를 서버에 날려준다.
+
+그렇게 해서 얻은 상위 3개 뉴스 링크가 너무 길었기 때문에 shorturl로 변환해준다.
+
+3개의 shorturl로 변환된 링크를 알맞은 뉴스 타이틀과 묶어 리스트 형태로 반환한다.
+
+#### twitterAPIClient.py
+
+SINCE_ID부터 시작해 타임라인을 관찰하며 자신에게 날라온 멘션이 있는지, 그리고 멘션이 있다면 [뉴스 키워드] 형태인지 체크해서 naverAPIClient의 인자로 pass해준다.
+
+결괏값을 naverAPIClient로부터 받으면 해당 트윗에 멘션으로 결과를 달아준다.
+
+#### twitter_set_api.py
+
+트위터 API 세팅을 위해 따로 빼둔 파일이다.
+
+consumer_key, consumer_secret 등의 키 값을 환경변수로 읽어들여 API를 생성하고 에러가 발생할 경우 log로 남긴다.
+
+성공적으로 API를 생성할 경우 해당 API를 반환한다.
+
+#### errors.py
+
+네이버 API를 사용할 때 
 
 ## 3. 프로젝트 구현
 
