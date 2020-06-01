@@ -84,8 +84,6 @@ class naverAPIClient:
 
         request = self.get_request(url)
 
-#custom exception.py 사용
-
         try:
             result_titles, result_urls = self.get_news_data(request)
         except FailedToLoadNews as e:
